@@ -53,8 +53,8 @@ def main(args: DictConfig):
     device = torch.device("cuda:0")
 
     # メモリの事前割り当てを設定（例: 1GBに制限）
-    torch.cuda.set_per_process_memory_fraction(8.0 / torch.cuda.get_device_properties(device).total_memory, device)
-   '''
+    torch.cuda.set_per_process_memory_fraction(8.0 / torch.cuda.get_device_properties(device).total_memory, device)   
+    '''
         ディレクトリ構造:
 
         data
