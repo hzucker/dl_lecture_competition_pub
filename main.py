@@ -80,6 +80,7 @@ def main(args: DictConfig):
         delta_t_ms=100,
         num_bins=4
     )
+    print(args.data_loader.train.batch_size)
     train_set = loader.get_train_dataset()
     test_set = loader.get_test_dataset()
     collate_fn = train_collate
