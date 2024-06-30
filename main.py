@@ -47,12 +47,6 @@ def save_optical_flow_to_npy(flow: torch.Tensor, file_name: str):
 @hydra.main(version_base=None, config_path="configs", config_name="base")
 def main(args: DictConfig):
     set_seed(args.seed)
-    # 必要なGPUデバイスのインデックスを取得
-    device = torch.device("cuda:0")
-
-    # メモリの事前割り当てを設定（例: 1GBに制限）
-    torch.cuda.set_per_process_memory_fraction(8.0 / torch.cuda.get_device_properties(device).total_memory, device)
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     '''
         ディレクトリ構造:
