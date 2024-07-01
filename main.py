@@ -46,6 +46,7 @@ def save_optical_flow_to_npy(flow: torch.Tensor, file_name: str):
 
 @hydra.main(version_base=None, config_path="configs", config_name="base")
 def main(args: DictConfig):
+    args.train.epochs = 5  # ここでエポック数を設定
     set_seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     '''
