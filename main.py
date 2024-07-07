@@ -11,13 +11,6 @@ import torch.nn as nn
 import torchvision
 from torchvision import transforms
 
-import torchtext
-from torchtext.data.utils import get_tokenizer
-
-import torchtext.vocab as vocab
-
-# SpaCyを使用して英語のトークナイザーを取得
-tokenizer = get_tokenizer('spacy', language='en_core_web_sm')
 
 def set_seed(seed):
     random.seed(seed)
@@ -65,13 +58,8 @@ def process_text(text):
     # 連続するスペースを1つに変換
     text = re.sub(r'\s+', ' ', text).strip()
 
-    # SpaCyのトークナイザーを使用してトークン化
-    tokens = tokenizer(text)
-    return tokens
+    return text
 
-
-# GloVeの事前学習済みエンベディングを読み込む
-glove = vocab.GloVe(name='6B', dim=100)
 
 # 1. データローダーの作成
 class VQADataset(torch.utils.data.Dataset):
@@ -142,36 +130,23 @@ class VQADataset(torch.utils.data.Dataset):
         """
         image = Image.open(f"{self.image_dir}/{self.df['image'][idx]}")
         image = self.transform(image)
-
-#        question_text = process_text(self.df["question"][idx])
-#        question = np.zeros(len(self.idx2question) + 1)  # 未知語用の要素を追加
-#        question_words = question_text.split(" ")        
-#        for word in question_words:
-#            try:
-#                question[self.question2idx[word]] = 1  # one-hot表現に変換
-#            except KeyError:
-#                question[-1] = 1  # 未知語
-
-        # 質問文の分散表現（エンベディング）に変換
-        question_text = process_text(self.df["question"][idx])
-        question_tokens = [torch.tensor(glove.stoi[token]) for token in question_text if token in glove.stoi]
-
-        if not question_tokens:
-            question_tokens = torch.zeros(1, dtype=torch.long)  # 未知語の場合はゼロベクトルで埋める
-
-        question_embedding = torch.stack(question_tokens).mean(0)  # エンベディングの平均を取る
+        question = np.zeros(len(self.idx2question) + 1)  # 未知語用の要素を追加
+        question_words = self.df["question"][idx].split(" ")
+        for word in question_words:
+            try:
+                question[self.question2idx[word]] = 1  # one-hot表現に変換
+            except KeyError:
+                question[-1] = 1  # 未知語
 
         if self.answer:
             answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
             mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
 
-#            return image, torch.Tensor(question), torch.Tensor(answers), int(mode_answer_idx)
-            return image, question_embedding, torch.Tensor(answers), int(mode_answer_idx)
+            return image, torch.Tensor(question), torch.Tensor(answers), int(mode_answer_idx)
 
         else:
-#            return image, torch.Tensor(question)
-           return image, question_embedding
-    
+            return image, torch.Tensor(question)
+
     def __len__(self):
         return len(self.df)
 
