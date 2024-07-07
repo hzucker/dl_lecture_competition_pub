@@ -18,7 +18,9 @@ from torchvision import transforms
 import torchtext.vocab as vocab
 
 # SpaCyを使用して英語のトークナイザーを取得
+spacy.load('en_core_web_sm')
 tokenizer = get_tokenizer('spacy', language='en_core_web_sm')
+
 
 def set_seed(seed):
     random.seed(seed)
