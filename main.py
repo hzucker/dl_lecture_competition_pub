@@ -1,6 +1,5 @@
-import torchtext
-from torchtext.data.utils import get_tokenizer
-import spacy
+pip install torchtext spacy
+python -m spacy download en_core_web_sm
 
 import re
 import random
@@ -14,6 +13,9 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision import transforms
+
+import torchtext
+from torchtext.data.utils import get_tokenizer
 
 import torchtext.vocab as vocab
 
