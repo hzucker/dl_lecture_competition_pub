@@ -92,12 +92,11 @@ class VQADataset(torch.utils.data.Dataset):
 
         # 質問文に含まれる単語を辞書に追加
         for question in self.df["question"]:
-            for question in question_list:
-                question = process_text(question)
-                words = question.split(" ")
-                for word in words:
-                    if word not in self.question2idx:
-                        self.question2idx[word] = len(self.question2idx)
+            question = process_text(question)
+            words = question.split(" ")
+            for word in words:
+                if word not in self.question2idx:
+                    self.question2idx[word] = len(self.question2idx)
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
 
         if self.answer:
