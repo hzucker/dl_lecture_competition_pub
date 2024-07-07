@@ -1,6 +1,3 @@
-pip install torchtext spacy
-python -m spacy download en_core_web_sm
-
 import re
 import random
 import time
@@ -385,35 +382,6 @@ def eval(model, dataloader, optimizer, criterion, device):
 
     return total_loss / len(dataloader), total_acc / len(dataloader), simple_acc / len(dataloader), time.time() - start
 
-class gcn():
-    def __init__(self):
-        pass
-
-    def __call__(self, x):
-        mean = torch.mean(x)
-        std = torch.std(x)
-        return (x - mean)/(std + 10**(-6))  # 0除算を防ぐ
-
-# 標準化後の画像を[0, 1]に正規化する
-def deprocess(x):
-    """
-    Argument
-    --------
-    x : np.ndarray
-        入力画像．(H, W, C)
-
-    Return
-    ------
-    _x : np.ndarray
-        [0, 1]で正規化した画像．(H, W, C)
-    """
-    _min = np.min(x)
-    _max = np.max(x)
-    _x = (x - _min)/(_max - _min)
-    return _x
-
-GCN = gcn()
-
 
 def main():
     # deviceの設定
@@ -423,8 +391,7 @@ def main():
     # dataloader / model
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        GCN
+        transforms.ToTensor()
     ])
     train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", transform=transform)
     test_dataset = VQADataset(df_path="./data/valid.json", image_dir="./data/valid", transform=transform, answer=False)
