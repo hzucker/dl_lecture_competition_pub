@@ -61,6 +61,7 @@ def process_text(text):
     return text
 
 
+
 # 1. データローダーの作成
 class VQADataset(torch.utils.data.Dataset):
     def __init__(self, df_path, image_dir, transform=None, answer=True):
@@ -308,17 +309,17 @@ class VQAModel(nn.Module):
 
         return x
 
-class gcn():
-    def __init__(self):
-        pass
-
-    def __call__(self, x):
-        mean = torch.mean(x)
-        std = torch.std(x)
-        return (x - mean)/(std + 10**(-6))  # 0除算を防ぐ
+#class gcn():
+#    def __init__(self):
+#        pass
+#
+#    def __call__(self, x):
+#        mean = torch.mean(x)
+#        std = torch.std(x)
+#        return (x - mean)/(std + 10**(-6))  # 0除算を防ぐ
 
 # 標準化後の画像を[0, 1]に正規化する
-def deprocess(x):
+#def deprocess(x):
     """
     Argument
     --------
@@ -330,12 +331,12 @@ def deprocess(x):
     _x : np.ndarray
         [0, 1]で正規化した画像．(H, W, C)
     """
-    _min = np.min(x)
-    _max = np.max(x)
-    _x = (x - _min)/(_max - _min)
-    return _x
+#    _min = np.min(x)
+#    _max = np.max(x)
+#    _x = (x - _min)/(_max - _min)
+#    return _x
 
-GCN = gcn()
+#GCN = gcn()
 
 # 4. 学習の実装
 def train(model, dataloader, optimizer, criterion, device):
@@ -395,7 +396,7 @@ def main():
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        GCN
+#        GCN
     ])
     train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", transform=transform)
     test_dataset = VQADataset(df_path="./data/valid.json", image_dir="./data/valid", transform=transform, answer=False)
@@ -407,7 +408,7 @@ def main():
     model = VQAModel(vocab_size=len(train_dataset.question2idx)+1, n_answer=len(train_dataset.answer2idx)).to(device)
 
     # optimizer / criterion
-    num_epoch = 20
+    num_epoch = 3
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 
