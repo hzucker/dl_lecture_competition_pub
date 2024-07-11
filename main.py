@@ -11,9 +11,23 @@ import torch.nn as nn
 import torchvision
 from torchvision import transforms
 
+###ここから　https://data-science.media/data-analysis/natural-language-processing-python/
+pip install nltk
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.probability import FreqDist
+from nltk import pos_tag
+from nltk.chunk import ne_chunk
+from nltk.tree import Tree
 
-#import nltk
-#from nltk.corpus import stopwords
+# NLTKのリソースをダウンロード（これは初回のみ必要です）
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+nltk.download('stopwords')
+###ここまで　https://data-science.media/data-analysis/natural-language-processing-python/
 
 
 def set_seed(seed):
@@ -73,15 +87,15 @@ def process_text(text):
     text = re.sub(r'\d+', '0', text)
 
     #トークン化　https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-#    text = nltk.word_tokenize(text)
+    text = nltk.word_tokenize(text)
 
     #stopwordsの削除 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
     text = [word for word in text if not word in set(stopwords.words("english"))]
 
     # レマタイザーのインスタンス化 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-#    lemma = nltk.WordNetLemmatizer()
+    lemma = nltk.WordNetLemmatizer()
     # トークン化してリストになっているので、リストから1単語ずつ取り出してレマタイズの実行 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-#    text = [lemma.lemmatize(word) for word in text]
+    text = [lemma.lemmatize(word) for word in text]
   
     return text
 
