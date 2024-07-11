@@ -12,8 +12,8 @@ import torchvision
 from torchvision import transforms
 
 
-import nltk
-from nltk.corpus import stopwords
+#import nltk
+#from nltk.corpus import stopwords
 
 
 def set_seed(seed):
@@ -73,15 +73,15 @@ def process_text(text):
     text = re.sub(r'\d+', '0', text)
 
     #トークン化　https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    text = nltk.word_tokenize(text)
+#    text = nltk.word_tokenize(text)
 
     #stopwordsの削除 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
     text = [word for word in text if not word in set(stopwords.words("english"))]
 
     # レマタイザーのインスタンス化 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    lemma = nltk.WordNetLemmatizer()
+#    lemma = nltk.WordNetLemmatizer()
     # トークン化してリストになっているので、リストから1単語ずつ取り出してレマタイズの実行 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    text = [lemma.lemmatize(word) for word in text]
+#    text = [lemma.lemmatize(word) for word in text]
   
     return text
 
