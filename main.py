@@ -12,7 +12,7 @@ import torchvision
 from torchvision import transforms
 
 ###ここから　https://data-science.media/data-analysis/natural-language-processing-python/
-#!pip install nltk
+#pip install nltk
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -118,7 +118,8 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問文に含まれる単語を辞書に追加
         for question in self.df["question"]:
             question = process_text(question)
-            words = question.split(" ")
+#            words = question.split(" ")
+            words = nltk.word_tokenize(question)
             for word in words:
                 if word not in self.question2idx:
                     self.question2idx[word] = len(self.question2idx)
@@ -171,7 +172,8 @@ class VQADataset(torch.utils.data.Dataset):
         image = Image.open(f"{self.image_dir}/{self.df['image'][idx]}")
         image = self.transform(image)
         question = np.zeros(len(self.idx2question) + 1)  # 未知語用の要素を追加
-        question_words = self.df["question"][idx].split(" ")
+        #question_words = self.df["question"][idx].split(" ")
+        question_words = self.df["question"][idx]
         for word in question_words:
             try:
                 question[self.question2idx[word]] = 1  # one-hot表現に変換
