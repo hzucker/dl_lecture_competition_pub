@@ -12,7 +12,7 @@ import torchvision
 from torchvision import transforms
 
 ###ここから　https://data-science.media/data-analysis/natural-language-processing-python/
-pip install nltk
+#!pip install nltk
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
