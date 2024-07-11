@@ -12,6 +12,10 @@ import torchvision
 from torchvision import transforms
 
 
+import nltk
+from nltk.corpus import stopwords
+
+
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
@@ -23,6 +27,10 @@ def set_seed(seed):
 
 
 def process_text(text):
+
+    # アルファベットのaからzまでAからZまでを抽出 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = re.sub("[^a-zA-Z]", " ", text)
+    
     # lowercase
     text = text.lower()
 
@@ -58,6 +66,23 @@ def process_text(text):
     # 連続するスペースを1つに変換
     text = re.sub(r'\s+', ' ', text).strip()
 
+    #桁区切り数字を 0 に変換 https://note.com/narudesu/n/na35de30a583a
+    text = re.sub(r'\b\d{1,3}(,\d{3})*\b', '0', text)
+
+    #数値を全て 0 に変換 https://note.com/narudesu/n/na35de30a583a
+    text = re.sub(r'\d+', '0', text)
+
+    #トークン化　https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = nltk.word_tokenize(text)
+
+    #stopwordsの削除 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = [word for word in text if not word in set(stopwords.words("english"))]
+
+    # レマタイザーのインスタンス化 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    lemma = nltk.WordNetLemmatizer()
+    # トークン化してリストになっているので、リストから1単語ずつ取り出してレマタイズの実行 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = [lemma.lemmatize(word) for word in text]
+  
     return text
 
 
