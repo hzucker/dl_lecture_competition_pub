@@ -147,8 +147,11 @@ class VQADataset(torch.utils.data.Dataset):
                 for answer in answers:
                     word = answer["answer"]
                     word = process_text(word)
-                    if word not in self.answer2idx:
-                        self.answer2idx[word] = len(self.answer2idx)
+                    for single_word in word:
+                        if single_word not in self.answer2idx:
+                            self.answer2idx[word] = len(self.answer2idx)
+#                    if word not in self.answer2idx:
+#                        self.answer2idx[word] = len(self.answer2idx)
             self.idx2answer = {v: k for k, v in self.answer2idx.items()}  # 逆変換用の辞書(answer)
 
     def update_dict(self, dataset):
@@ -499,6 +502,3 @@ def main():
     submission = np.array(submission)
     torch.save(model.state_dict(), "model.pth")
     np.save("submission.npy", submission)
-
-if __name__ == "__main__":
-    main()
