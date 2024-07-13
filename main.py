@@ -147,8 +147,8 @@ class VQADataset(torch.utils.data.Dataset):
                 for answer in answers:
                     word = answer["answer"]
                     word = process_text(word)
-                    for single_word in word:
-                        if single_word not in self.answer2idx:
+                    for word in answer:
+                        if word not in self.answer2idx:
                             self.answer2idx[word] = len(self.answer2idx)
 #                    if word not in self.answer2idx:
 #                        self.answer2idx[word] = len(self.answer2idx)
