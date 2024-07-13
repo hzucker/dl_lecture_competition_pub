@@ -119,11 +119,12 @@ def process_text(text):
 
 # 1. データローダーの作成
 class VQADataset(torch.utils.data.Dataset):
-    def __init__(self, df_path, image_dir, transform=None, answer=True):
+    def __init__(self, df_path, image_dir, w2v_model, transform=None, answer=True):
         self.transform = transform  # 画像の前処理
         self.image_dir = image_dir  # 画像ファイルのディレクトリ
         self.df = pandas.read_json(df_path)  # 画像ファイルのパス，question, answerを持つDataFrame
         self.answer = answer
+        self.w2v_model = w2v_model
 
         # question / answerの辞書を作成
         self.question2idx = {}
@@ -199,8 +200,8 @@ class VQADataset(torch.utils.data.Dataset):
 #                question[self.question2idx[word]] = 1  # one-hot表現に変換
 #            except KeyError:
 #                question[-1] = 1  # 未知語
-            if word in w2v_model:
-                question_vector.append(self.w2v_model[word])
+            if word in self.w2v_model.wv:
+                question_vector.append(self.w2v_model.wv[word])
             else:
                 question_vector.append(np.zeros(self.w2v_model.vector_size))
 
