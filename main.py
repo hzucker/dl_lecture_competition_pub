@@ -118,8 +118,8 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問文に含まれる単語を辞書に追加
         for question in self.df["question"]:
             question = process_text(question)
-#            words = question.split(" ")
-            words = nltk.word_tokenize(question)
+            words = question.split(" ")
+#            words = nltk.word_tokenize(question)
             for word in words:
                 if word not in self.question2idx:
                     self.question2idx[word] = len(self.question2idx)
