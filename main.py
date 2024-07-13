@@ -463,7 +463,7 @@ def main():
     # dataloader / model
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor(),
+        transforms.ToTensor()
 #        GCN
     ])
     train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", transform=transform)
