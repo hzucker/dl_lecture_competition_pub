@@ -15,6 +15,7 @@ from torchvision import transforms
 #pip install nltk
 import nltk
 from nltk.corpus import stopwords
+from nltk.corpus import brown
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 from nltk import pos_tag
@@ -27,7 +28,15 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
 nltk.download('stopwords')
+nltk.download('brown')
 ###ここまで　https://data-science.media/data-analysis/natural-language-processing-python/
+
+
+###ここから　https://www.kikagaku.co.jp/kikagaku-blog/word2vec/
+#pip install gensim
+import gensim
+from gensim.models import word2vec
+###ここまで　https://www.kikagaku.co.jp/kikagaku-blog/word2vec/
 
 
 def set_seed(seed):
@@ -39,6 +48,13 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
+
+###ここから　https://www.kikagaku.co.jp/kikagaku-blog/word2vec/
+ # vector_size=100で、単語ベクトルの次元数を100に指定しています。
+w2v_model = gensim.models.Word2Vec(brown.sents(), vector_size=100, seed=0)
+
+w2v_model.save("word2vec_model.model")
+###ここまで　https://www.kikagaku.co.jp/kikagaku-blog/word2vec/
 
 def process_text(text):
 
@@ -118,9 +134,9 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問文に含まれる単語を辞書に追加
         for question in self.df["question"]:
             question = process_text(question)
-            words = question.split(" ")
+#            words = question.split(" ")
 #            words = nltk.word_tokenize(question)
-            for word in words:
+            for word in question:
                 if word not in self.question2idx:
                     self.question2idx[word] = len(self.question2idx)
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
@@ -174,11 +190,19 @@ class VQADataset(torch.utils.data.Dataset):
         question = np.zeros(len(self.idx2question) + 1)  # 未知語用の要素を追加
         #question_words = self.df["question"][idx].split(" ")
         question_words = self.df["question"][idx]
+        question_vector = []
         for word in question_words:
-            try:
-                question[self.question2idx[word]] = 1  # one-hot表現に変換
-            except KeyError:
-                question[-1] = 1  # 未知語
+#            try:
+#                question[self.question2idx[word]] = 1  # one-hot表現に変換
+#            except KeyError:
+#                question[-1] = 1  # 未知語
+            if word in w2v_model:
+                question_vector.append(self.w2v_model[word])
+            else:
+                question_vector.append(np.zeros(self.w2v_model.vector_size))
+
+        # 質問ベクトルの平均を取る
+        question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
         if self.answer:
             answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
