@@ -109,9 +109,9 @@ def process_text(text):
     text = [word for word in text if not word in set(stopwords.words("english"))]
 
     # レマタイザーのインスタンス化 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    lemma = nltk.WordNetLemmatizer()
+#    lemma = nltk.WordNetLemmatizer()
     # トークン化してリストになっているので、リストから1単語ずつ取り出してレマタイズの実行 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    text = [lemma.lemmatize(word) for word in text]
+#    text = [lemma.lemmatize(word) for word in text]
   
     return text
 
