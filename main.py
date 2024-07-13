@@ -504,5 +504,5 @@ def main():
     np.save("submission.npy", submission)
 
 
-    if __name__ == "__main__":
-       main()
+if __name__ == "__main__":
+   main()
