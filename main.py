@@ -208,9 +208,13 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問ベクトルの平均を取る
         question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
-        if self.answer:
-            answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
-            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+        answer_words = self.df["answer"][idx]
+        answer_vector = []
+        for word in answer_words:
+
+            if self.answer:
+                answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
+                mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
 
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
 
@@ -467,16 +471,19 @@ def main():
         transforms.ToTensor()
 #        GCN
     ])
-    model = VQAModel
 
-    train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", transform=transform)
-    test_dataset = VQADataset(df_path="./data/valid.json", image_dir="./data/valid", transform=transform, answer=False)
+
+    # Word2Vecモデルのロード
+    w2v_model = gensim.models.Word2Vec.load("./word2vec_model.model")  # 事前に学習済みモデルをロード
+
+    train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", w2v_model=w2v_model, transform=transform)
+    test_dataset = VQADataset(df_path="./data/valid.json", image_dir="./data/valid", w2v_model=w2v_model, transform=transform, answer=False)
     test_dataset.update_dict(train_dataset)
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=False)
 
-#    model = VQAModel(vocab_size=len(train_dataset.question2idx)+1, n_answer=len(train_dataset.answer2idx)).to(device)
+    model = VQAModel(vocab_size=len(train_dataset.question2idx)+1, n_answer=len(train_dataset.answer2idx)).to(device)
 
 
     # optimizer / criterion
