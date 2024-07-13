@@ -502,3 +502,14 @@ def main():
     submission = np.array(submission)
     torch.save(model.state_dict(), "model.pth")
     np.save("submission.npy", submission)
+
+from ipywidgets import FloatProgress
+from IPython.display import display
+from time import sleep
+
+fp = FloatProgress(min=0, max=100)
+display(fp)
+
+for i in range(100):
+    sleep(0.1)
+    fp.value = i
