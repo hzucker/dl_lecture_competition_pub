@@ -211,6 +211,10 @@ class VQADataset(torch.utils.data.Dataset):
         answer_words = self.df["answer"][idx]
         answer_vector = []
         for word in answer_words:
+            if word in self.w2v_model.wv:
+                answer_vector.append(self.w2v_model.wv[word])
+            else:
+                answer_vector.append(np.zeros(self.w2v_model.vector_size))
 
             if self.answer:
                 answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
