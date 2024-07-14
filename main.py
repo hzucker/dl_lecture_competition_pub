@@ -97,10 +97,10 @@ def process_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
 
     #桁区切り数字を 0 に変換 https://note.com/narudesu/n/na35de30a583a
-    text = re.sub(r'\b\d{1,3}(,\d{3})*\b', '0', text)
+#    text = re.sub(r'\b\d{1,3}(,\d{3})*\b', '0', text)
 
     #数値を全て 0 に変換 https://note.com/narudesu/n/na35de30a583a
-    text = re.sub(r'\d+', '0', text)
+#    text = re.sub(r'\d+', '0', text)
 
     #トークン化　https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
     text = nltk.word_tokenize(text)
@@ -147,8 +147,8 @@ class VQADataset(torch.utils.data.Dataset):
             for answers in self.df["answers"]:
                 for answer in answers:
                     word = answer["answer"]
-                    word = process_text(word)
-                    for word in answer:
+                    answer_words = process_text(word)
+                    for word in answer_words:
                         if word not in self.answer2idx:
                             self.answer2idx[word] = len(self.answer2idx)
 #                    if word not in self.answer2idx:
@@ -208,19 +208,35 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問ベクトルの平均を取る
         question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
+        #answerがあるときだけ処理する
         if self.answer:
-            answer_words = self.df["answers"][idx]
+#            answer_ten = self.df["answers"][idx]　#"answers"=10人分の回答全て
 
-            answer_vector = []
-            for word in answer_words:
-                if word in self.w2v_model.wv:
-                    answer_vector.append(self.w2v_model.wv[word])
-                else:
-                    answer_vector.append(np.zeros(self.w2v_model.vector_size))
+#            answer_vector = []
+#            print(answer_ten)
+
+#            for answer1 in answer_ten:
+#                print(answer1)
+#                answer = answer1["answer"]
+#                print(answer)
+
+#                answer_words = process_text(answer)
+#                for answord in answer_words:
+#                    if answer in self.w2v_model.wv:
+#                        answer_vector.append(self.w2v_model.wv[answord])
+#                    else:
+#                        answer_vector.append(np.zeros(self.w2v_model.vector_size))
 #            if KeyError:
 #                answer[-1] = 1  # 未知語
 
-            answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
+#            answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
+            answers = []
+            for answer1 in self.df["answers"][idx]:
+                answer_words = process_text(answer1["answer"])
+                for answer_word in answer_words:
+                    answers.append(self.answer2idx[answer_word])
+
+
             mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
 
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
@@ -481,7 +497,7 @@ def main():
 
 
     # Word2Vecモデルのロード
-    w2v_model = gensim.models.Word2Vec.load("./word2vec_model.model")  # 事前に学習済みモデルをロード
+#    w2v_model = gensim.models.Word2Vec.load("./word2vec_model.model")  # 事前に学習済みモデルをロード
 
     train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", w2v_model=w2v_model, transform=transform)
     test_dataset = VQADataset(df_path="./data/valid.json", image_dir="./data/valid", w2v_model=w2v_model, transform=transform, answer=False)
