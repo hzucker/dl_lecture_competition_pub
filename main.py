@@ -208,17 +208,20 @@ class VQADataset(torch.utils.data.Dataset):
         # 質問ベクトルの平均を取る
         question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
-        answer_words = self.df["answer"][idx]
-        answer_vector = []
-        for word in answer_words:
-            if word in self.w2v_model.wv:
-                answer_vector.append(self.w2v_model.wv[word])
-            else:
-                answer_vector.append(np.zeros(self.w2v_model.vector_size))
+        if self.answer:
+            answer_words = self.df["answer"][idx]
 
-            if self.answer:
-                answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
-                mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+            answer_vector = []
+            for word in answer_words:
+                if word in self.w2v_model.wv:
+                    answer_vector.append(self.w2v_model.wv[word])
+                else:
+                    answer_vector.append(np.zeros(self.w2v_model.vector_size))
+#            if KeyError:
+#                answer[-1] = 1  # 未知語
+
+            answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
+            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
 
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
 
