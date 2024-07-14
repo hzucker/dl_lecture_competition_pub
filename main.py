@@ -209,7 +209,7 @@ class VQADataset(torch.utils.data.Dataset):
         question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
         if self.answer:
-            answer_words = self.df["answer"][idx]
+            answer_words = self.df["answers"][idx]
 
             answer_vector = []
             for word in answer_words:
