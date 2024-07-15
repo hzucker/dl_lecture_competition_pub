@@ -254,7 +254,9 @@ class VQADataset(torch.utils.data.Dataset):
 
 
             mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
-
+            print(torch.Tensor(question_vector).shape)
+            print(torch.Tensor(answers).shape)
+            
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
 
         else:
