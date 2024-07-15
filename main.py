@@ -217,6 +217,7 @@ class VQADataset(torch.utils.data.Dataset):
                 question_vector.append(np.zeros(self.w2v_model.vector_size))
 
         while len(question_vector) < self.max_qlen:
+            print("padding")
             question_vector.append(np.zeros(100))
 
 
