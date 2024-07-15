@@ -254,8 +254,8 @@ class VQADataset(torch.utils.data.Dataset):
                     answers[self.answer2idx[answer_word]] = 1
 
 
-            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
-            #mode_answer_idx = mode(answers.tolist()) #リストに変換
+#            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+            mode_answer_idx = mode(answers.tolist()) #リストに変換
             print(torch.Tensor(question_vector).shape)
             print(torch.Tensor(answers).shape)
             
