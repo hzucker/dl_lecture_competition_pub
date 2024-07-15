@@ -10,7 +10,8 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision import transforms
-
+import nltk
+nltk.download('stopwords')
 
 def set_seed(seed):
     random.seed(seed)
@@ -23,6 +24,9 @@ def set_seed(seed):
 
 
 def process_text(text):
+    # アルファベットのaからzまでAからZまでを抽出 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = re.sub("[^a-zA-Z]", " ", text)
+
     # lowercase
     text = text.lower()
 
@@ -57,6 +61,9 @@ def process_text(text):
 
     # 連続するスペースを1つに変換
     text = re.sub(r'\s+', ' ', text).strip()
+
+    #stopwordsの削除 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
+    text = [word for word in text if not word in set(stopwords.words("english"))]
 
     return text
 
