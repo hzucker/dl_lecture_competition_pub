@@ -214,10 +214,9 @@ class VQADataset(torch.utils.data.Dataset):
             if word in self.w2v_model.wv:
                 question_vector.append(self.w2v_model.wv[word])
             else:
-                question_vector.append(np.zeros(self.w2v_model.vector_size))
-
+                print(self.w2v_model.vector_size)
+                question_vector.append(np.zeros(100))
         while len(question_vector) < self.max_qlen:
-            print("padding")
             question_vector.append(np.zeros(100))
 
 
