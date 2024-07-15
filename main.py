@@ -418,10 +418,10 @@ class VQAModel(nn.Module):
     def __init__(self, vocab_size: int, n_answer: int):
         super().__init__()
         self.resnet = ResNet18()
-        self.text_encoder = nn.Linear(vocab_size, 100)
+        self.text_encoder = nn.Linear(vocab_size, 2900)
 
         self.fc = nn.Sequential(
-            nn.Linear(612, 100),
+            nn.Linear(512 + 100, 100),
             nn.ReLU(inplace=True),
             nn.Linear(100, n_answer)
         )
@@ -441,8 +441,9 @@ class VQAModel(nn.Module):
 #        question_feature_flat = question_feature.view(question_feature.size(0), -1)  # [128, 2900]
 
         # 結合
-        x = torch.cat([image_feature, question_feature], dim=1)  # [128, 3412]
-
+        x = torch.cat([image_feature, question_feature], dim=1)  # [128, 612]
+        print("Concatenated feature shape:", x.shape)
+        
         # 結合
 #        x = torch.cat([image_feature, question_feature], dim=1)
         x = self.fc(x)
