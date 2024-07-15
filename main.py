@@ -41,9 +41,6 @@ def process_text(text):
     # 小数点のピリオドを削除
     text = re.sub(r'(?<!\d)\.(?!\d)', '', text)
 
-    #半角記号除去
-    text = re.sub(r'"#$%&()*+-/:;<=>@[\\]^_`{|}~“”][,', '', text)
-
     # 冠詞の削除
     text = re.sub(r'\b(a|an|the)\b', '', text)
 
@@ -402,6 +399,7 @@ def main():
     transform = transforms.Compose([
         transforms.RandomHorizontalFlip(),
         transforms.Resize((224, 224)),
+        transforms.Pad(padding=3, padding_mode="edge"),
         transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
         transforms.ToTensor(),
 #        GCN
