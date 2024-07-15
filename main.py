@@ -150,8 +150,8 @@ class VQADataset(torch.utils.data.Dataset):
                     self.question2idx[word] = len(self.question2idx)
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
 
-        #self.max_qlen = max_qlen
-        self.max_qlen = 150
+        self.max_qlen = max_qlen
+#        self.max_qlen = 150
 #        print("Max_qlenの大きさ")
 #        print(max_qlen)
 
@@ -211,7 +211,7 @@ class VQADataset(torch.utils.data.Dataset):
         print("------ check--------")
         print(question_words)
         print(idx)
-        for word in question_words:
+        for word in process_text(question_words):
 #            try:
 #                question[self.question2idx[word]] = 1  # one-hot表現に変換
 #            except KeyError:
