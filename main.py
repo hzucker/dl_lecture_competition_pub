@@ -435,7 +435,7 @@ class VQAModel(nn.Module):
         print("Question feature shape:", question_feature.shape)
 
         # question_featureの次元を2次元に変換
-#        question_feature = question_feature.view(question_feature.size(0), -1)
+        question_feature = question_feature.view(question_feature.size(0), -1)
 
         # Question featureをフラット化
 #        question_feature_flat = question_feature.view(question_feature.size(0), -1)  # [128, 2900]
