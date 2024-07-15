@@ -39,6 +39,8 @@ import gensim
 from gensim.models import word2vec
 ###ここまで　https://www.kikagaku.co.jp/kikagaku-blog/word2vec/
 
+# デバイスの指定
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def set_seed(seed):
     random.seed(seed)
