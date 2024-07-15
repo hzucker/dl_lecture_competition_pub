@@ -11,6 +11,7 @@ import torch.nn as nn
 import torchvision
 from torchvision import transforms
 import nltk
+from nltk.corpus import stopwords
 nltk.download('stopwords')
 
 def set_seed(seed):
