@@ -283,7 +283,7 @@ class VQADataset(torch.utils.data.Dataset):
 # 2. 評価指標の実装
 # 簡単にするならBCEを利用する
 def VQA_criterion(batch_pred: torch.Tensor, batch_answers: torch.Tensor):
-    answers = answers.to(device)
+    #answers = answers.to(device)
 
     total_acc = 0.
     for pred, answers in zip(batch_pred, batch_answers):
