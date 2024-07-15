@@ -1,3 +1,4 @@
+import sys
 import re
 import random
 import time
@@ -262,6 +263,11 @@ class VQADataset(torch.utils.data.Dataset):
 #            mode_answer_idx = mode(answers.tolist()) #リストに変換
             #print(torch.Tensor(question_vector).shape)
             #print(torch.Tensor(answers).shape)
+            if torch.Tensor(question_vector).shape[0]==231:
+                print(idx)
+                print(question_words)
+                sys.exit(1)
+
             
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
 
