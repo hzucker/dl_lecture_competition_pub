@@ -293,6 +293,7 @@ def VQA_criterion(batch_pred: torch.Tensor, batch_answers: torch.Tensor):
         total_acc += sum(acc) / 10
 
     return total_acc / len(batch_pred)
+
 #        acc = 0.
 #        for i in range(len(answers)):
 #            num_match = 0
