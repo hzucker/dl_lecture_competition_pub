@@ -126,6 +126,9 @@ class VQADataset(torch.utils.data.Dataset):
         self.answer = answer
         self.w2v_model = w2v_model
 
+        self.max_qlength = 0
+        max_qlen = 0
+
         # question / answerの辞書を作成
         self.question2idx = {}
         self.answer2idx = {}
@@ -137,10 +140,18 @@ class VQADataset(torch.utils.data.Dataset):
             question = process_text(question)
 #            words = question.split(" ")
 #            words = nltk.word_tokenize(question)
+            cur_qlen = len(question) #長さを取得
+            if cur_qlen > max_qlen:
+                max_qlen = cur_qlen
+
             for word in question:
                 if word not in self.question2idx:
                     self.question2idx[word] = len(self.question2idx)
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
+
+        self.max_qlen = max_qlen
+        print("Max_qlenの大きさ")
+        print(max_qlen)
 
         if self.answer:
             # 回答に含まれる単語を辞書に追加
