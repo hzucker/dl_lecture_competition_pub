@@ -421,7 +421,7 @@ class VQAModel(nn.Module):
         self.text_encoder = nn.Linear(vocab_size, 100)
 
         self.fc = nn.Sequential(
-            nn.Linear(512, 100),
+            nn.Linear(612, 100),
             nn.ReLU(inplace=True),
             nn.Linear(100, n_answer)
         )
