@@ -206,6 +206,9 @@ class VQADataset(torch.utils.data.Dataset):
         #question_words = self.df["question"][idx].split(" ")
         question_words = self.df["question"][idx]
         question_vector = []
+        print("------ check --------")
+        print(question_words)
+        print(idx)
         for word in question_words:
 #            try:
 #                question[self.question2idx[word]] = 1  # one-hot表現に変換
@@ -254,10 +257,10 @@ class VQADataset(torch.utils.data.Dataset):
                     answers[self.answer2idx[answer_word]] = 1
 
 
-#            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
-            mode_answer_idx = mode(answers.tolist()) #リストに変換
-            print(torch.Tensor(question_vector).shape)
-            print(torch.Tensor(answers).shape)
+            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+#            mode_answer_idx = mode(answers.tolist()) #リストに変換
+            #print(torch.Tensor(question_vector).shape)
+            #print(torch.Tensor(answers).shape)
             
             return image, torch.Tensor(question_vector), torch.Tensor(answers), int(mode_answer_idx)
 
