@@ -421,7 +421,7 @@ class VQAModel(nn.Module):
         self.text_encoder = nn.Linear(vocab_size, 100)
 
         self.fc = nn.Sequential(
-            nn.Linear(1024, 100),
+            nn.Linear(612, 100),
             nn.ReLU(inplace=True),
             nn.Linear(100, n_answer)
         )
@@ -437,10 +437,16 @@ class VQAModel(nn.Module):
         # question_featureの次元を2次元に変換
         question_feature = question_feature.view(question_feature.size(0), -1)
 
-        # 結合
-        x = torch.cat([image_feature, question_feature], dim=1)
-        x = self.fc(x)
+        # Question featureをフラット化
+        question_feature_flat = question_feature.view(question_feature.size(0), -1)  # [128, 2900]
 
+        # 結合
+        x = torch.cat([image_feature, question_feature_flat], dim=1)  # [128, 3412]
+
+        # 結合
+#        x = torch.cat([image_feature, question_feature], dim=1)
+        x = self.fc(x)
+       
         return x
 
 #class gcn():
