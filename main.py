@@ -418,17 +418,17 @@ class VQAModel(nn.Module):
     def __init__(self, vocab_size: int, n_answer: int):
         super().__init__()
         self.resnet = ResNet18()
-        self.text_encoder = nn.Linear(vocab_size, 2900)
+        self.text_encoder = nn.Linear(vocab_size, 100)
 
         self.fc = nn.Sequential(
-            nn.Linear(512 + 100 * 2900, 100),
+            nn.Linear(512, 100),
             nn.ReLU(inplace=True),
             nn.Linear(100, n_answer)
         )
 
     def forward(self, image, question):
         image_feature = self.resnet(image)  # 画像の特徴量
-        question_feature = self.text_encoder(question)  # テキストの特徴量
+        question_feature = self.text_encoder(question.mean(dim=1))  # テキストの特徴量
 
 
         print("Image feature shape:", image_feature.shape)
