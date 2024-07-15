@@ -428,14 +428,15 @@ class VQAModel(nn.Module):
 
     def forward(self, image, question):
         image_feature = self.resnet(image)  # 画像の特徴量
+        print("Question shape:", question.shape)
         question_feature = self.text_encoder(question.mean(dim=1))  # テキストの特徴量
 
 
-        print("Image feature shape:", image_feature.shape)
-        print("Question feature shape:", question_feature.shape)
+        print("Image feature shape:", image_feature.shape)#Image feature shape: torch.Size([128, 512])
+        print("Question feature shape:", question_feature.shape)#Question feature shape: torch.Size([128, 100])
 
         # question_featureの次元を2次元に変換
-        question_feature = question_feature.view(question_feature.size(0), -1)
+#        question_feature = question_feature.view(question_feature.size(0), -1)
 
         # Question featureをフラット化
 #        question_feature_flat = question_feature.view(question_feature.size(0), -1)  # [128, 2900]
