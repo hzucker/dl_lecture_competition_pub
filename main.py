@@ -150,8 +150,8 @@ class VQADataset(torch.utils.data.Dataset):
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
 
         self.max_qlen = max_qlen
-        print("Max_qlenの大きさ")
-        print(max_qlen)
+#        print("Max_qlenの大きさ")
+#        print(max_qlen)
 
         if self.answer:
             # 回答に含まれる単語を辞書に追加
@@ -247,7 +247,7 @@ class VQADataset(torch.utils.data.Dataset):
 #                answer[-1] = 1  # 未知語
 
 #            answers = [self.answer2idx[process_text(answer["answer"])] for answer in self.df["answers"][idx]]
-            answers = np.zeros(len(self.answer2index))
+            answers = np.zeros(len(self.answer2idx))
             for answer1 in self.df["answers"][idx]:
                 answer_words = process_text(answer1["answer"])
                 for answer_word in answer_words:
