@@ -150,7 +150,7 @@ class VQADataset(torch.utils.data.Dataset):
         self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
 
         #self.max_qlen = max_qlen
-        self.max_qlen = 120
+        self.max_qlen = 300
 #        print("Max_qlenの大きさ")
 #        print(max_qlen)
 
