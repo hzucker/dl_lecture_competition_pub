@@ -210,9 +210,9 @@ class VQADataset(torch.utils.data.Dataset):
         #question_words = self.df["question"][idx].split(" ")
         question_words = self.df["question"][idx]
         question_vector = []
-        print("------ check--------")
-        print(question_words)
-        print(idx)
+#        print("------ check--------")
+#        print(question_words)
+#        print(idx)
         for word in process_text(question_words):
 #            try:
 #                question[self.question2idx[word]] = 1  # one-hot表現に変換
@@ -283,8 +283,9 @@ class VQADataset(torch.utils.data.Dataset):
 # 2. 評価指標の実装
 # 簡単にするならBCEを利用する
 def VQA_criterion(batch_pred: torch.Tensor, batch_answers: torch.Tensor):
-    total_acc = 0.
+    answers = answers.to(device)
 
+    total_acc = 0.
     for pred, answers in zip(batch_pred, batch_answers):
         # 各回答ごとの一致数を計算
         matches = (pred.unsqueeze(0) == answers).sum(dim=1)
@@ -546,10 +547,13 @@ def main():
 
     # dataloader / model
     transform = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
         transforms.Resize((224, 224)),
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
         transforms.ToTensor()
 #        GCN
     ])
+
 
 
     # Word2Vecモデルのロード
