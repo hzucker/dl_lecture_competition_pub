@@ -216,6 +216,7 @@ class VQADataset(torch.utils.data.Dataset):
             else:
                 print(self.w2v_model.vector_size)
                 question_vector.append(np.zeros(100))
+
         while len(question_vector) < self.max_qlen:
             question_vector.append(np.zeros(100))
 
@@ -251,6 +252,8 @@ class VQADataset(torch.utils.data.Dataset):
                 answer_words = process_text(answer1["answer"])
                 for answer_word in answer_words:
                     answers.append(self.answer2idx[answer_word])
+            while len(answers) < self.max_qlen:
+                answers.append(np.zeros(100))
 
 
             mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
