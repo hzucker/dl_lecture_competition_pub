@@ -418,12 +418,12 @@ class VQAModel(nn.Module):
     def __init__(self, vocab_size: int, n_answer: int):
         super().__init__()
         self.resnet = ResNet18()
-        self.text_encoder = nn.Linear(vocab_size, 512)
+        self.text_encoder = nn.Linear(vocab_size, 100)
 
         self.fc = nn.Sequential(
-            nn.Linear(1024, 512),
+            nn.Linear(1024, 100),
             nn.ReLU(inplace=True),
-            nn.Linear(512, n_answer)
+            nn.Linear(100, n_answer)
         )
 
     def forward(self, image, question):
