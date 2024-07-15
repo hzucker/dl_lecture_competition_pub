@@ -252,11 +252,10 @@ class VQADataset(torch.utils.data.Dataset):
                 answer_words = process_text(answer1["answer"])
                 for answer_word in answer_words:
                     answers.append(self.answer2idx[answer_word])
-            while len(answers) < self.max_qlen:
-                answers.append(np.zeros(100))
 
 
-            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+#            mode_answer_idx = mode(answers)  # 最頻値を取得（正解ラベル）
+            mode_answer_idx = mode(answers.tolist()) #リストに変換
             print(torch.Tensor(question_vector).shape)
             print(torch.Tensor(answers).shape)
             
