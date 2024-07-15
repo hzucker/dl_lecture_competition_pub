@@ -216,8 +216,13 @@ class VQADataset(torch.utils.data.Dataset):
             else:
                 question_vector.append(np.zeros(self.w2v_model.vector_size))
 
+        while len(question_vector) < self.max_qlen:
+            question_vector.append(np.zero(100))
+
+
+
         # 質問ベクトルの平均を取る
-        question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
+#        question_vector = np.mean(question_vector, axis=0) if question_vector else np.zeros(self.w2v_model.vector_size)
 
         #answerがあるときだけ処理する
         if self.answer:
