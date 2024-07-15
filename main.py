@@ -394,7 +394,9 @@ def main():
 
     # dataloader / model
     transform = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
         transforms.Resize((224, 224)),
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
         transforms.ToTensor(),
 #        GCN
     ])
@@ -408,7 +410,7 @@ def main():
     model = VQAModel(vocab_size=len(train_dataset.question2idx)+1, n_answer=len(train_dataset.answer2idx)).to(device)
 
     # optimizer / criterion
-    num_epoch = 3
+    num_epoch = 1
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 
