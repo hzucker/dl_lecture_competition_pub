@@ -430,6 +430,14 @@ class VQAModel(nn.Module):
         image_feature = self.resnet(image)  # 画像の特徴量
         question_feature = self.text_encoder(question)  # テキストの特徴量
 
+
+        print("Image feature shape:", image_feature.shape)
+        print("Question feature shape:", question_feature.shape)
+
+        # question_featureの次元を2次元に変換
+        question_feature = question_feature.view(question_feature.size(0), -1)
+
+        # 結合
         x = torch.cat([image_feature, question_feature], dim=1)
         x = self.fc(x)
 
