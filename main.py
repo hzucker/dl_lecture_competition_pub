@@ -537,7 +537,8 @@ def main():
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 #    model = VQAModel(vocab_size=len(train_dataset.question2idx)+1, n_answer=len(train_dataset.answer2idx)).to(device)
-    model = VQAModel(vocab_size=len(w2v_model.wv.index_to_key)+1, n_answer=len(train_dataset.answer2idx)).to(device)
+#    model = VQAModel(vocab_size=len(w2v_model.wv.index_to_key)+1, n_answer=len(train_dataset.answer2idx)).to(device)
+    model = VQAModel(vocab_size=3712, n_answer=len(train_dataset.answer2idx)).to(device)
 
     # optimizer / criterion
     num_epoch = 1
