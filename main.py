@@ -10,9 +10,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision import transforms
-import nltk
-from nltk.corpus import stopwords
-nltk.download('stopwords')
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -43,6 +41,9 @@ def process_text(text):
     # 小数点のピリオドを削除
     text = re.sub(r'(?<!\d)\.(?!\d)', '', text)
 
+    #半角記号除去
+    text = re.sub(r'"#$%&()*+-/:;<=>@[\\]^_`{|}~“”][,', '', text)
+
     # 冠詞の削除
     text = re.sub(r'\b(a|an|the)\b', '', text)
 
@@ -62,9 +63,6 @@ def process_text(text):
 
     # 連続するスペースを1つに変換
     text = re.sub(r'\s+', ' ', text).strip()
-
-    #stopwordsの削除 https://qiita.com/fumifumitaro/items/c613d033ebc94c5e608d
-    text = [word for word in text if not word in set(stopwords.words("english"))]
 
     return text
 
