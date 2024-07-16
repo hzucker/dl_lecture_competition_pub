@@ -401,7 +401,9 @@ def main():
         transforms.Resize((224, 224)),
         transforms.Pad(padding=3, padding_mode="edge"),
         transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 #        GCN
     ])
     train_dataset = VQADataset(df_path="./data/train.json", image_dir="./data/train", transform=transform)
